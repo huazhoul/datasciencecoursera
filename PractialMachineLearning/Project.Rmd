@@ -1,0 +1,98 @@
+---
+output: html_document
+---
+# Practial Machine Learning Course Project
+
+## Introduction
+In this project, the goal is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants to quantify how well of a particular activity they do. 
+
+The training data for this project are available here: 
+
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+
+The test data are available here: 
+
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
+
+The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).  
+
+## Load the data and requried libraries and Perform Exploratory Data Analysis
+After we load the data in R, we first take a view of dataset: mtcars. To have basic understanding how this dataset looks like: what are the variables in the dataset, how many observations. Since we are trying to answer question about relationship between transmission type and MPG, we will take a quick view of relationship between those two variables and also relationships betweens all variables. [Output figures are attached to Appendix]
+
+```{r, warning=FALSE, error=FALSE}
+# Clean up environment
+rm(list=ls())
+
+# Load required packages
+library(ggplot2)
+library(caret)
+library(randomForest)
+
+# Set seed to make result reproducible
+set.seed(975)
+
+# Load the training and test data
+data_training <- read.csv("pml-training.csv")
+data_testing <- read.csv("pml-testing.csv")
+
+```
+## Clean up data
+
+Quick scan the data set, it is easy to notice that there are a lot of invalid data, NA and empty, in both training and testing data. Some data, such as timestamp, user name, etc, will not be useful feature  in this project. Therefore, we remove those data first.
+
+```{r, warning=FALSE, error=FALSE}
+
+col_na <- which(sapply(data_testing, function(x) all(is.na(x))))
+col_remove <- union(c(1:5), col_na)
+
+data_training_clean = data_training[, -col_remove]
+data_testing_clean = data_testing[, -col_remove]
+
+```
+
+## Build Regression Model
+
+First, we split the training data into training (75%) and testing (25%) for cross validation purpose
+
+```{r, warning=FALSE, error=FALSE, results='hide'}
+
+inTrain <- createDataPartition(y=data_training_clean$classe, p=0.75, list=FALSE)
+training <- data_training_clean[inTrain,]
+testing <- data_training_clean[-inTrain,]
+
+```
+We choose random forst method with 10-fold cross valdiation to build the model.
+
+```{r, warning=FALSE, error=FALSE}
+train_control = trainControl(method="cv", number=10)
+modFit <- train(classe~., data=training, method="rf", trControl=train_control)
+```
+After we trained the model, we apply the training data to the model. From table below, we can see that our model 100% predict in-sample data
+```{r, warning=FALSE, error=FALSE}
+
+predTrain <- predict(modFit, training)
+Matrix_Train <- confusionMatrix(training$classe, predTrain)
+# Prediction result for training data
+print(Matrix_Train$table)
+# Prediction accuracy for training data
+print(Matrix_Train$overall)
+
+```
+We then apply testing data to the model. From the table below, we can see that our model 99.78% predict out-sample data.
+```{r, warning=FALSE, error=FALSE}
+
+predTesting <- predict(modFit, testing)
+Matrix_Testing <- confusionMatrix(testing$classe, predTesting)
+# Prediction result for training data
+print(Matrix_Testing$table)
+# Prediction accuracy for testing data
+print(Matrix_Testing$overall)
+```
+From above two results, we believe out model can provide high accuracy for the data. From the model, we can also tell that the most important features as listed below
+```{r, warning=FALSE, error=FALSE}
+
+print(varImp(modFit))
+```
+
+# Results
+We apply the model we obtained above and apply to cleaned testing data set. Our model achieve 100% accuracy of prediction those test data.
