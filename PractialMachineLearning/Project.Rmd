@@ -16,8 +16,8 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).  
 
-## Load the data and requried libraries and Perform Exploratory Data Analysis
-After we load the data in R, we first take a view of dataset: mtcars. To have basic understanding how this dataset looks like: what are the variables in the dataset, how many observations. Since we are trying to answer question about relationship between transmission type and MPG, we will take a quick view of relationship between those two variables and also relationships betweens all variables. [Output figures are attached to Appendix]
+## Load the data and requried libraries
+First we load the data into R and configure environement
 
 ```{r, warning=FALSE, error=FALSE}
 # Clean up environment
@@ -25,6 +25,7 @@ rm(list=ls())
 
 # Load required packages
 library(ggplot2)
+library(lattice)
 library(caret)
 library(randomForest)
 

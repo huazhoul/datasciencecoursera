@@ -63,17 +63,17 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</a></p>
 <p>The data for this project come from this source: <a href="http://groupware.les.inf.puc-rio.br/har">http://groupware.les.inf.puc-rio.br/har</a>. More information is available from the website here: <a href="http://groupware.les.inf.puc-rio.br/har">http://groupware.les.inf.puc-rio.br/har</a> (see the section on the Weight Lifting Exercise Dataset).</p>
 </div>
-<div id="load-the-data-and-requried-libraries-and-perform-exploratory-data-analysis" class="section level2">
-<h2>Load the data and requried libraries and Perform Exploratory Data Analysis</h2>
-<p>After we load the data in R, we first take a view of dataset: mtcars. To have basic understanding how this dataset looks like: what are the variables in the dataset, how many observations. Since we are trying to answer question about relationship between transmission type and MPG, we will take a quick view of relationship between those two variables and also relationships betweens all variables. [Output figures are attached to Appendix]</p>
+<div id="load-the-data-and-requried-libraries" class="section level2">
+<h2>Load the data and requried libraries</h2>
+<p>First we load the data into R and configure environement</p>
 <pre class="r"><code># Clean up environment
 rm(list=ls())
 
 # Load required packages
 library(ggplot2)
-library(caret)</code></pre>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre class="r"><code>library(randomForest)</code></pre>
+library(lattice)
+library(caret)
+library(randomForest)</code></pre>
 <pre><code>## randomForest 4.6-10
 ## Type rfNews() to see new features/changes/bug fixes.</code></pre>
 <pre class="r"><code># Set seed to make result reproducible
