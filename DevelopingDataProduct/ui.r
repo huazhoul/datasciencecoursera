@@ -10,7 +10,7 @@ shinyUI(navbarPage("Project",
             mainPanel(
                 h3('The actual eruption time'),
                 verbatimTextOutput("actValue"),
-                h3('The predicted eruption'),
+                h3('The predicted eruption time'),
                 verbatimTextOutput("predictValue")
             )
         )
